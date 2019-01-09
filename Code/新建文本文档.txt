@@ -1,0 +1,22 @@
+int get_path(struct task_struct *mytask, int fd)
+{
+        struct file *myfile = NULL;
+        struct files_struct *files = NULL;
+        char path[100] = {'\0'};
+        char *ppath = path;
+ 
+        files = mytask->files;
+        if (!files) {
+                printk("files is null..\n");
+                return -1;
+        }
+        myfile = files->fdt->fd[fd];
+        if (!myfile) {
+                printk("myfile is null..\n");
+                return -1;
+        }
+        ppath = d_path(&(myfile->f_path), ppath, 100);
+ 
+        printk("path:%s\n", ppath);
+        return 0;
+}
